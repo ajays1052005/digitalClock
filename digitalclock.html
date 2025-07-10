@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Premium Digital Clock</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+   
+
+    .clock-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 40px 60px;
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .time {
+      font-size: 4em;
+      color: #ffffff;
+      letter-spacing: 2px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .date {
+      font-size: 1.5em;
+      color: #eeeeee;
+      margin-top: 10px;
+    }
+
+    .format-toggle {
+      margin-top: 20px;
+      background-color: #ffffff22;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s ease;
+    }
+
+    .format-toggle:hover {
+      background-color: #ffffff44;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="clock-container">
+    <div class="time" id="time"></div>
+    <div class="date" id="date">Loading...</div>
+    <button class="format-toggle" onclick="toggleFormat()">Switch Format</button>
+  </div>
+
+  <script>
+    let is24Hour = true;
+
+    function updateClock() {
+      const now = new Date();
+
+      let hours = now.getHours();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+
+      let ampm = '';
+
+      if (!is24Hour) {
+        ampm = hours >= 12 ? ' PM' : ' AM';
+        hours = hours % 12 || 12;
+      }
+
+      const timeStr = [
+        hours.toString().padStart(2, '0'),
+        minutes.toString().padStart(2, '0'),
+        seconds.toString().padStart(2, '0')
+      ].join(':') + ampm;
+
+      const dateStr = now.toLocaleDateString(undefined, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      document.getElementById('time').textContent = timeStr;
+      document.getElementById('date').textContent = dateStr;
+    }
+
+    function toggleFormat() {
+      is24Hour = !is24Hour;
+      updateClock(); // update immediately
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock(); // initial call
+  </script>
+</body>
+</html>
